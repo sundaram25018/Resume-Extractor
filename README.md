@@ -26,7 +26,12 @@ pip install -r requirements.txt
 ```
 > Ensure that you have Python installed (Recommended: Python 3.8+).
 
-### **3️⃣ Run the Application**
+### **3️⃣ Download this also**
+```bash
+python -m spacy download en_core_web_sm
+```
+
+### **4️⃣ Run the Application**
 ```bash
 streamlit run index.py
 ```
