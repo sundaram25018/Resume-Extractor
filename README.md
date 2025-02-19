@@ -56,7 +56,7 @@ Feel free to fork this repository, submit issues, and create pull requests to im
 
 ## 📧 Contact
 If you have any questions or suggestions, feel free to reach out:
-- **Email**: your-email@example.com
+- **Email**: sundaram7573@gmail.com
 - **GitHub**: [sundaram25018](https://github.com/sundaram25018)
 - **LinkedIn**: [sundaram25018](https://linkedin.com/in/sundaram25018)
 
