@@ -2,14 +2,34 @@ import streamlit as st
 import fitz  # PyMuPDF
 import re
 import spacy
+from PIL import Image
+import pytesseract
+import docx
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 # Load spaCy model
 nlp = spacy.load("en_core_web_sm")
 
-def extract_text_from_pdf(pdf_file):
-    doc = fitz.open(stream=pdf_file.read(), filetype="pdf")
-    text = "\n".join([page.get_text("text") for page in doc])
-    return text
+def extract_text_from_file(uploaded_file):
+    file_type = uploaded_file.type
+
+    if file_type == "application/pdf":
+        doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
+        return "\n".join([page.get_text("text") for page in doc])
+
+    elif file_type in ["image/png", "image/jpeg"]:
+        image = Image.open(uploaded_file)
+        return pytesseract.image_to_string(image)  # OCR for text extraction
+
+    elif file_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        doc = docx.Document(uploaded_file)
+        return "\n".join([para.text for para in doc.paragraphs])
+
+    elif file_type == "text/plain":
+        return uploaded_file.read().decode("utf-8")
+
+    else:
+        return "Unsupported file type"
 
 def extract_email(text):
     email_pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"  
@@ -28,7 +48,6 @@ def extract_name(text):
     # Step 1: Look for a full name pattern (two capitalized words)
     for line in lines:
         words = line.strip().split()
-        print(words)
         if len(words) == 2 and all(w.isalpha() and w[0].isupper() for w in words):
             return line.strip()
 
@@ -45,56 +64,36 @@ def extract_name(text):
 
     return "Not found"
 
-def extract_links(text):
-    linkedin_pattern = r"(https?://)?(www\.)?linkedin\.com/in/[a-zA-Z0-9-_/]+"
-    github_pattern = r"(https?://)?(www\.)?github\.com/[a-zA-Z0-9-_/]+"
-
-    linkedin_links = re.findall(linkedin_pattern, text)
-    github_links = re.findall(github_pattern, text)
-
-    linkedin = linkedin_links[0][0] if linkedin_links else "Not found"
-    github = github_links[0][0] if github_links else "Not found"
-
-    return linkedin, github
-
-def extract_hyperlinks_from_pdf(pdf_file):
-    doc = fitz.open(stream=pdf_file.read(), filetype="pdf")
-    links = []
-
-    for page in doc:
-        for link in page.get_links():
-            if "uri" in link:
-                links.append(link["uri"])
-
-    return links
-
 def main():
-    st.title("Resume Information Extractor")
-    uploaded_file = st.file_uploader("Upload Resume (PDF)", type=["pdf"])
-    
+    st.set_page_config(page_title="Resume Extractor", layout="wide", page_icon="📄")
+    uploaded_file = st.file_uploader("Upload Resume", type=["pdf", "docx", "txt", "png", "jpg", "jpeg"])
+    st.title("📄 Resume Information Extractor")
     if uploaded_file:
-        text = extract_text_from_pdf(uploaded_file)
-        name = extract_name(text)
-        email = extract_email(text)
-        phone = extract_phone(text)
-        # linkedin, github = extract_links(text)
-        # pdf_links = extract_hyperlinks_from_pdf(uploaded_file)
+        with st.spinner("Extracting text..."):
+            text = extract_text_from_file(uploaded_file)
+            if text == "Unsupported file type":
+                st.error("File type not supported.")
+            else:
+                name = extract_name(text)
+                email = extract_email(text)
+                phone = extract_phone(text)
 
+        st.markdown("---") 
 
-        # for link in pdf_links:
-        #    if "linkedin.com/in" in link:
-        #     linkedin = link
-        #    elif "github.com" in link:
-        #     github = link
-        
-      
-        
-        st.subheader("Extracted Information")
-        st.write(f"**Name:** {name}")
-        st.write(f"**Email:** {email}")
-        st.write(f"**Phone:** {phone}")
-        # st.write(f"**LinkedIn:** {linkedin}")
-        # st.write(f"**GitHub:** {github}")
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.subheader("👤 Name")
+            st.info(name, icon="🔍")
+
+        with col2:
+            st.subheader("📧 Email")
+            st.success(email, icon="✉️")
+
+        with col3:
+            st.subheader("📞 Phone")
+            st.warning(phone, icon="📱")
+            
         
         
 
