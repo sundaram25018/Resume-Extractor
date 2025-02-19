@@ -1,0 +1,6 @@
+streamlit
+fitz
+spacy
+PIL
+pytesseract
+docx
