@@ -16,7 +16,7 @@ This project is a **Resume Information Extractor** built using **Streamlit** and
 ## 🛠️ Installation & Setup
 ### **1️⃣ Clone the Repository**
 ```bash
-git clone https://github.com/yourusername/resume-extractor.git
+git clone https://github.com/sundaram25018/resume-extractor.git
 cd resume-extractor
 ```
 
@@ -28,14 +28,14 @@ pip install -r requirements.txt
 
 ### **3️⃣ Run the Application**
 ```bash
-streamlit run app.py
+streamlit run index.py
 ```
 The app will start in your browser at **http://localhost:8501**.
 
 ## 📂 File Structure
 ```
 resume-extractor/
-│── app.py               # Main application script
+│── index.py               # Main application script
 │── requirements.txt     # Required dependencies
 │── README.md            # Project documentation
 ```
@@ -46,6 +46,7 @@ resume-extractor/
 - **spaCy** (NLP for Name Extraction)
 - **PyMuPDF (fitz)** (PDF text extraction)
 - **Regex** (Email & Phone Extraction)
+- **PIL** (For text extraction from Images)
 
 ## 📜 License
 This project is open-source and available under the **MIT License**.
@@ -57,7 +58,7 @@ Feel free to fork this repository, submit issues, and create pull requests to im
 If you have any questions or suggestions, feel free to reach out:
 - **Email**: your-email@example.com
 - **GitHub**: [yourusername](https://github.com/sundaram25018)
-- **LinkedIn**: [yourprofile](https://linkedin.com/in/yourprofile)
+- **LinkedIn**: [yourprofile](https://linkedin.com/in/sundaram25018)
 
 ---
 ### 🌟 If you found this project helpful, give it a ⭐ on GitHub!
