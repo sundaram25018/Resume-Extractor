@@ -57,8 +57,8 @@ Feel free to fork this repository, submit issues, and create pull requests to im
 ## 📧 Contact
 If you have any questions or suggestions, feel free to reach out:
 - **Email**: your-email@example.com
-- **GitHub**: [yourusername](https://github.com/sundaram25018)
-- **LinkedIn**: [yourprofile](https://linkedin.com/in/sundaram25018)
+- **GitHub**: [sundaram25018](https://github.com/sundaram25018)
+- **LinkedIn**: [sundaram25018](https://linkedin.com/in/sundaram25018)
 
 ---
 ### 🌟 If you found this project helpful, give it a ⭐ on GitHub!
