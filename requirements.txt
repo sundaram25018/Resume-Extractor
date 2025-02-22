@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 streamlit
 fitz
 spacy
 PIL
 pytesseract
+=======
+streamlit
+fitz
+spacy
+PIL
+pytesseract
+>>>>>>> 8c4669f807a3ad91c510bc95ba6ff0433109228b
 docx

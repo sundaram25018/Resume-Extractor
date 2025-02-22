@@ -4,11 +4,18 @@ import docx2txt
 import fitz  # PyMuPDF for PDFs
 import mysql.connector
 import spacy
+from PIL import Image
+import docx
+import pytesseract
 from rapidfuzz import process
 from sentence_transformers import SentenceTransformer, util
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+
 
 # Load AI model for semantic matching
-model = SentenceTransformer("all-MiniLM-L6-v2")
+model = SentenceTransformer("all-mpnet-base-v2")
 nlp = spacy.load("en_core_web_sm")
 
 # Database connection
@@ -26,13 +33,25 @@ def connect_db():
 
 # Extract text from resume
 def extract_text_from_resume(uploaded_file):
-    file_type = uploaded_file.name.split(".")[-1]
-    if file_type == "pdf":
+    file_type = uploaded_file.type
+
+    if file_type == "application/pdf":
         doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
-        return "\n".join([page.get_text() for page in doc]).strip()
-    elif file_type == "docx":
-        return docx2txt.process(uploaded_file)
-    return None
+        return "\n".join([page.get_text("text") for page in doc])
+
+    elif file_type in ["image/png", "image/jpeg"]:
+        image = Image.open(uploaded_file)
+        return pytesseract.image_to_string(image)  # OCR for text extraction
+
+    elif file_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        doc = docx.Document(uploaded_file)
+        return "\n".join([para.text for para in doc.paragraphs])
+
+    elif file_type == "text/plain":
+        return uploaded_file.read().decode("utf-8")
+
+    else:
+        return "Unsupported file type"
 
 # Extract contact details
 # def extract_contact_details(text):
@@ -101,10 +120,19 @@ def extract_education_experience(text):
 
 # Match resume with job description
 def match_resume(resume_text, job_description):
-    resume_embedding = model.encode(resume_text, convert_to_tensor=True)
-    job_embedding = model.encode(job_description, convert_to_tensor=True)
-    similarity_score = util.pytorch_cos_sim(resume_embedding, job_embedding)
-    return similarity_score.item()
+    try:
+        resume_embedding = model.encode(resume_text, convert_to_tensor=True)
+        job_embedding = model.encode(job_description, convert_to_tensor=True)
+        similarity_score = util.pytorch_cos_sim(resume_embedding, job_embedding)
+        return similarity_score.item()
+    
+    except Exception:
+        # Fallback to TF-IDF
+        vectorizer = TfidfVectorizer()
+        docs = [resume_text, job_description]
+        tfidf_matrix = vectorizer.fit_transform(docs)
+        similarity_score = cosine_similarity(tfidf_matrix[0], tfidf_matrix[1])
+        return similarity_score[0][0]
 
 # Insert extracted data into MySQL
 def insert_resume_data(name, email, phone, skills, experience, education, match_score):
@@ -124,7 +152,7 @@ def insert_resume_data(name, email, phone, skills, experience, education, match_
 # Streamlit UI
 st.title("\U0001F4C4 AI-Powered Resume Screening System")
 
-uploaded_file = st.file_uploader("\U0001F4C2 Upload Resume (PDF/DOCX)", type=["pdf", "docx"])
+uploaded_file = st.file_uploader("\U0001F4C2 Upload Resume (PDF/DOCX)", type=["pdf", "docx","txt", "png", "jpg", "jpeg"])
 job_description = st.text_area("\U0001F4DD Enter Job Description")
 
 if uploaded_file and job_description:
