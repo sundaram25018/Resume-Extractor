@@ -1,70 +1,94 @@
-# Resume Information Extractor
+# AI-Powered Resume Screening System
 
-## 📌 Project Overview
-This project is a **Resume Information Extractor** built using **Streamlit** and **Natural Language Processing (NLP)**. The application allows users to upload resumes in various formats (PDF, DOCX, TXT, PNG, JPG) and extracts key details such as:
-- **Name**
-- **Email**
-- **Phone Number**
+## Overview
+This AI-powered Resume Screening System uses **Machine Learning, NLP, and Deep Learning** to analyze resumes and match them against job descriptions. The system extracts candidate details such as **name, email, phone number, skills, education, and experience**, then calculates a **match score** using **transformers and TF-IDF**. It provides a **Streamlit-based web interface** and stores the extracted data in a **MySQL database**.
 
-## 🚀 Features
-- Supports **multiple file formats** (PDF, DOCX, TXT, PNG, JPG, JPEG)
-- Uses **spaCy NLP** for **name extraction**
-- Utilizes **regular expressions (regex)** for **email and phone number extraction**
-- **Simple and clean UI** built with **Streamlit**
-- **Fast and lightweight** resume parsing
+## Features
+- 🏆 **AI-Powered Resume Screening** using Sentence Transformers (`all-mpnet-base-v2`)
+- 📂 **Supports PDF,DOCX,JPG,JPEG,PNG,TXT resumes**
+- 🔍 **Extracts candidate details** (Name, Email, Phone, Skills, Education, Experience)
+- 📊 **Matches resumes with job descriptions** based on semantic similarity
+- 🏛 **Stores results in MySQL database**
+- 🌐 **User-friendly Streamlit Web App**
+- 🔄 **Fallback TF-IDF model for better accuracy**
 
-## 🛠️ Installation & Setup
-### **1️⃣ Clone the Repository**
+## Technologies Used
+- **Python**
+- **Streamlit** (Web App UI)
+- **MySQL** (Database)
+- **Sentence Transformers** (for job matching)
+- **TF-IDF** (fallback for similarity matching)
+- **Fuzzy Matching** (for skill extraction)
+- **PyMuPDF** (for PDF text extraction)
+- **docx2txt** (for DOCX text extraction)
+- **PIL** (for IMAGE text extraction)
+- **Regular Expressions** (for email & phone extraction)
+
+## Installation
+### 1. Clone the Repository
 ```bash
-git clone https://github.com/sundaram25018/resume-extractor.git
-cd resume-extractor
+git clone https://github.com/yourusername/resume-screening.git
+cd resume-screening
 ```
 
-### **2️⃣ Install Dependencies**
+### 2. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
-> Ensure that you have Python installed (Recommended: Python 3.8+).
 
-### **3️⃣ Download this also**
+### 3. Setup MySQL Database
+Create a MySQL database and run the following SQL command:
+```sql
+CREATE DATABASE resume_screening;
+USE resume_screening;
+CREATE TABLE resumes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    email VARCHAR(255),
+    phone VARCHAR(50),
+    skills TEXT,
+    experience TEXT,
+    education TEXT,
+    match_score FLOAT
+);
+```
+
+### 4. Configure Database Credentials
+Modify `config.py` (or inside `app.py`) with your MySQL details:
+```python
+DB_HOST = "localhost"
+DB_USER = "root"
+DB_PASSWORD = "yourpassword"
+DB_NAME = "resume_screening"
+```
+
+### 5. Run the Application
 ```bash
-python -m spacy download en_core_web_sm
+streamlit run app.py
 ```
 
-### **4️⃣ Run the Application**
-```bash
-streamlit run index.py
-```
-The app will start in your browser at **http://localhost:8501**.
+## Usage
+1. Upload a **PDF,JPGE,JPG,PNG,TXT,DOCX** resume.
+2. Enter the **Job Description**.
+3. The system extracts and displays:
+   - Candidate Name 👤
+   - Email 📧
+   - Phone Number 📞
+   - Skills 💡
+   - Experience 📊
+   - Education 🎓
+   - Match Score ✅
+4. Data is **stored in MySQL**.
+5. View **Ranked Candidates** based on match score.
 
-## 📂 File Structure
-```
-resume-extractor/
-│── index.py               # Main application script
-│── requirements.txt     # Required dependencies
-│── README.md            # Project documentation
-```
+## Future Improvements
+- 📌 **Use LLaMA or Falcon** for better name/entity extraction
+- 📌 **Add a dashboard with filters & analytics**
+- 📌 **Deploy using Docker & Cloud Services**
 
-## 🔹 Technologies Used
-- **Python**
-- **Streamlit** (Web UI)
-- **spaCy** (NLP for Name Extraction)
-- **PyMuPDF (fitz)** (PDF text extraction)
-- **Regex** (Email & Phone Extraction)
-- **PIL** (For text extraction from Images)
+## Contributing
+Feel free to **fork** this repository, **improve** the code, and **submit a pull request**! 🚀
 
-## 📜 License
-This project is open-source and available under the **MIT License**.
-
-## 🙌 Contributing
-Feel free to fork this repository, submit issues, and create pull requests to improve this project!
-
-## 📧 Contact
-If you have any questions or suggestions, feel free to reach out:
-- **Email**: sundaram7573@gmail.com
-- **GitHub**: [sundaram25018](https://github.com/sundaram25018)
-- **LinkedIn**: [sundaram25018](https://linkedin.com/in/sundaram25018)
-
----
-### 🌟 If you found this project helpful, give it a ⭐ on GitHub!
+## License
+This project is licensed under the **MIT License**.
 
