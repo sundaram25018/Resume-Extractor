@@ -152,7 +152,7 @@ def insert_resume_data(name, email, phone, skills, experience, education, match_
 # Streamlit UI
 st.title("\U0001F4C4 AI-Powered Resume Screening System")
 
-uploaded_file = st.file_uploader("\U0001F4C2 Upload Resume (PDF/DOCX)", type=["pdf", "docx","txt", "png", "jpg", "jpeg"])
+uploaded_file = st.file_uploader("\U0001F4C2 Upload Resume", type=["pdf", "docx","txt", "png", "jpg", "jpeg"])
 job_description = st.text_area("\U0001F4DD Enter Job Description")
 
 if uploaded_file and job_description:
