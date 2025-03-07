@@ -98,7 +98,7 @@ def extract_name(text):
 
 
 # Extract skills using fuzzy matching
-SKILLS_LIST = {"Python", "Machine Learning", "Deep Learning", "Data Science", "NLP", "MySQL", "TensorFlow", "Keras"}
+SKILLS_LIST = {"HTML", "CSS", "JavaScript", "ReactJS", "VueJS", "Angular", "mongodb", "Node.js"}
 
 def extract_skills(text):
     words = text.split()
@@ -150,6 +150,25 @@ def insert_resume_data(name, email, phone, skills, experience, education, match_
             st.error(f"Database Error: {e}")
 
 # Streamlit UI
+st.set_page_config(page_title="AI-Powered Resume Screening", layout="wide")
+st.markdown("""
+    <style>
+        .stTextInput, .stTextArea {
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        .stButton>button {
+            background-color: black;
+            color: black;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        .main {
+            background-color: black;
+        }
+    </style>
+""", unsafe_allow_html=True)
 st.title("\U0001F4C4 AI-Powered Resume Screening System")
 
 uploaded_file = st.file_uploader("\U0001F4C2 Upload Resume", type=["pdf", "docx","txt", "png", "jpg", "jpeg"])
@@ -169,6 +188,7 @@ if uploaded_file and job_description:
         insert_resume_data(name, email, phone, skills, experience, education, match_score)
 
         # Display extracted information
+        
         st.subheader("\U0001F50D Extracted Details")
         st.write(f"**\U0001F464 Email:** {name}")
         st.write(f"**\U0001F4E7 Email:** {email}")
