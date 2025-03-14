@@ -66,6 +66,7 @@ DB_NAME = "resume_screening"
 ```bash
 streamlit run app.py
 ```
+![image](https://github.com/user-attachments/assets/2d3fd494-df81-412a-b846-64c285a4dc4c)
 
 ## Usage
 1. Upload a **PDF,JPGE,JPG,PNG,TXT,DOCX** resume.
